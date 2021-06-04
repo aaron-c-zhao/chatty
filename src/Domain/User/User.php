@@ -8,7 +8,7 @@ use JsonSerializable;
 class User implements JsonSerializable
 {
     /**
-     * @var int|null
+     * @var int
      */
     private $id;
 
@@ -18,22 +18,22 @@ class User implements JsonSerializable
     private $username;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $firstName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $lastName;
 
     /**
-     * @param int|null  $id
+     * @param int  $id
      * @param string    $username
-     * @param string    $firstName
-     * @param string    $lastName
+     * @param string|null    $firstName
+     * @param string|null    $lastName
      */
-    public function __construct(?int $id, string $username, string $firstName, string $lastName)
+    public function __construct(int $id, string $username, ?string $firstName, ?string $lastName)
     {
         $this->id = $id;
         $this->username = strtolower($username);
@@ -44,7 +44,7 @@ class User implements JsonSerializable
     /**
      * @return int|null
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -60,7 +60,7 @@ class User implements JsonSerializable
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -68,7 +68,7 @@ class User implements JsonSerializable
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -84,5 +84,10 @@ class User implements JsonSerializable
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
         ];
+    }
+
+    public function __toString()
+    {
+        return "id: {$this->id}, username: {$this->username}, firstName: {$this->firstName}, lastName: {$this->lastName}";
     }
 }

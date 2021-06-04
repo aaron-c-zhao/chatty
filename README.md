@@ -1,42 +1,143 @@
-# Slim Framework 4 Skeleton Application
+# Backend Engineer Home Assignment - Bunq 
 
-[![Coverage Status](https://coveralls.io/repos/github/slimphp/Slim-Skeleton/badge.svg?branch=master)](https://coveralls.io/github/slimphp/Slim-Skeleton?branch=master)
-
-Use this skeleton application to quickly setup and start working on a new Slim Framework 4 application. This application uses the latest Slim 4 with Slim PSR-7 implementation and PHP-DI container implementation. It also uses the Monolog logger.
-
-This skeleton application was built for Composer. This makes setting up a new Slim Framework application quick and easy.
+A simple chat backend implemented in PHP with slim. The dependencies are handled by **composer**. The project is tested with PHP 7.4.3 and Sqlite 3.31.1.
 
 ## Install the Application
 
-Run this command from the directory in which you want to install your new Slim Framework application.
+First change directory into the proejct root directory then install the dependencies with 
 
 ```bash
-composer create-project slim/slim-skeleton [my-app-name]
+composer install
 ```
-
-Replace `[my-app-name]` with the desired directory name for your new application. You'll want to:
-
-* Point your virtual host document root to your new application's `public/` directory.
-* Ensure `logs/` is web writable.
-
-To run the application in development, you can run these commands 
+To run the program:
 
 ```bash
-cd [my-app-name]
 composer start
 ```
 
-Or you can use `docker-compose` to run the app with `docker`, so you can run these commands:
-```bash
-cd [my-app-name]
-docker-compose up -d
-```
-After that, open `http://localhost:8080` in your browser.
+## Access the REST API
+By default the backend listens to *localhost:8080*.
 
-Run this command in the application directory to run the test suite
+### User related endpoints
+1. Retrieve a list of all users
+	* endpoint: */users* 
+	* method: HTTP GET
+	* parameter: None
+	* Response:
+    ```json
+    {
+	"statusCode": 200,
+	"data": [
+	    {
+		"id": 1,
+		"username": "John Wick",
+		"firstName": "Keanu",
+		"lastName": "Reeves"
+	    }
+	    ...
+	    ]
+    }
+    ```
+2. Retrieve one user with a specific id 
+	* endpoint: */users/{id}*
+	* method: HTTP GET
+	* parameter: id
+	* Response:
+	```json
+	{
+	  "statusCode": 200,
+          "data": {
+            "id": 1,
+            "username": "trump",
+	    "firstName": "Stupid",
+	    "lastName": "Shit"
+	  }
+	}
+	```
+3. New user
+	* endpoint: */user*
+	* method: HTTP POST
+	* parameter: None 
+	* request:
+	```json
+	{
+	    "id": 2,
+	    "username": "biden",
+	    "first_name": "foolish",
+	    "last_name": "bitch"
+	}
+	```
+	* response: None
 
-```bash
-composer test
-```
+	
+### Message related endpoints
+1. Retrieve message history of a user
+	* endpoint: */chat/{id}*
+	* method: HTTP GET	
+	* parameter: id
+	* Response:
+	```json
+	{
+	  "data": [
+	    {
+	      "id": 1,
+	      "sender": 1,
+	      "receiver": 2,
+	      "content": "hello world!",
+	      "timestamp": 1622750782
+	    },
+	    {
+	      "id": 2,
+	      "sender": 2,
+	      "receiver": 1,
+	      "content": "Hey",
+	      "timestamp": 1622751611
+	    }
+	  ]
+	}
+	```
 
-That's it! Now go build something cool.
+2. Retrieve message after a center timestamp
+	* endpoint: */chat/{id}/{timestamp}*
+	* method: HTTP GET
+	* parameter: 
+		* id: user id
+		* timestamp: unix format time stamp
+	* Response:
+	```json
+	{
+	  "statusCode": 200,
+	  "data": [
+	    {
+	      "id": 2,
+	      "sender": 2,
+	      "receiver": 1,
+	      "content": "Hey",
+	      "timestamp": 1622751611
+	    }
+	  ]
+	}
+	```
+3. New message
+	* endpoint: */chat*
+	* method: HTTP POST
+	* parameter: None
+	* request body:
+	```json
+	{
+	    "id": 2,
+	    "sender": 2,
+	    "receiver": 1,
+	    "content": "Hey",
+	    "timestamp": 1622751611
+	}
+	```
+	* response: None
+	
+4. Delete message
+	* endpoint */chat/{id}*
+	* method: HTTP DELETE
+	* parameter: 
+		* id: message id
+	* response: None
+
